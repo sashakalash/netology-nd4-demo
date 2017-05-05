@@ -7,11 +7,17 @@ angular
         var vm = this;
 
         vm.format = 'M/d/yy h:mm:ss a';
+        vm.save = save;
 
         PokemonService.getPokemon($stateParams.pokemonId)
-            .then(function(pokemonData) {
+            .then(function (pokemonData) {
                 vm.pokemon = pokemonData.data;
             });
+
+        function save(name) {
+            vm.pokemon.name = name;
+            return $q.when();
+        }
 
     }).component('pokemonDetail', {
         //components match only elements
@@ -69,10 +75,9 @@ angular
                 ndModel: '=', // The string model to edit
                 ndTrigger: '=', // The property to watch to decide when to trigger the input field.
                 ndSaveFn: '=', // The ctrl function to call to save the update. Expects a promise to be returned.
-                ndCancel: '=', // Function to call when cancel is clicked. Can be toggle function as it won't pass anything
-                ndValidationConfig: '=?' //Object containing settings for validation config
+                mbValidationConfig: '=?' //Object containing settings for validation config
             },
-            link: function(scope, element) {
+            link: function (scope, element) {
 
                 var originalValue = angular.copy(scope.ndModel);
                 var originalContent;
@@ -88,7 +93,6 @@ angular
                     if (initialized) {
                         editValue = '';
                         getInnerElement().replaceWith($compile(originalContent)(scope.$parent));
-                        scope.ndCancel();
                         initialized = false;
                         childScope.$destroy();
                     }
@@ -102,7 +106,7 @@ angular
                     }
 
                     if (form.$valid) {
-                        scope.ndSaveFn(childScope.editValue).finally(function() {
+                        scope.ndSaveFn(childScope.editValue).finally(function () {
                             cancel();
                         });
                     }
@@ -111,7 +115,8 @@ angular
                 function initInput() {
 
                     originalValue = angular.copy(scope.ndModel);
-                    $templateRequest('components/nd-inline-edit.html').then(function(template) {
+                    console.log(originalValue)
+                    $templateRequest('components/nd-inline-edit.html').then(function (template) {
                         editValue = originalValue;
                         childScope = scope.$new();
                         angular.extend(childScope, {
@@ -125,7 +130,7 @@ angular
                     });
                 }
 
-                var triggerListener = scope.$watch('ndTrigger', function() {
+                var triggerListener = scope.$watch('ndTrigger', function () {
                     if (scope.ndTrigger) {
                         initInput();
                     } else {
@@ -133,7 +138,7 @@ angular
                     }
                 });
 
-                scope.$on('$destroy', function() {
+                scope.$on('$destroy', function () {
                     triggerListener();
                 });
             }
