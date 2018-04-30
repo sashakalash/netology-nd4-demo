@@ -1,3 +1,4 @@
+
 Найти:
 <input ng-model="myQuery"><br><br>
 
@@ -6,21 +7,37 @@
     <option value="id">ID</option>
     <option value="weight">Весу</option>
     <option value="height">Росту</option>
+    <option value="name">Имени</option>
+</select>
+По убыванию
+<!-- <input ng-model="sortReverse = !sortReverse" type="checkbox" name="reverse" /> -->
+Отобразить только:
+<select ng-model="typeSort">
+    <option value="">default</option>
+    <option value="electric">electric</option>
+    <option value="normal">normal</option>
+    <option value="grass">grass</option>
+    <option value="fire">fire</option>
+    <option value="water">water</option>
 </select>
 
 <ul>
-    <li ng-repeat="pokemon in pokemons | filter: myQuery | orderBy: myOrderProperty">
-        <img src="{{pokemon.ThumbnailImage}}">
+    <li ng-repeat="pokemon in pokemons | filter: myQuery | orderBy:myOrderProperty:sortReverse | filter: typeSort">
+        <img ng-click="showName(pokemon.name)" src="{{pokemon.ThumbnailImage}}">
 
         <small>ID #{{pokemon.id }}</small>
-        <h1>{{pokemon.name}}</h1>
+        <h1 ng-class="pokemon.type [0]">{{pokemon.name}}</h1>
         <p>Вес: {{pokemon.weight}}, рост: {{pokemon.height}}</p>
         <p>Тип: {{pokemon.type [0]}}</p>
         <hr />
+
     </li>
 </ul>
-
 <p ng-show="myQuery">
     Выведены покемоны, содержащие
     {{myQuery}}
+</p>
+<p ng-show="typeSort">
+        Выведены только покемоны, типа
+        {{typeSort}}
 </p>

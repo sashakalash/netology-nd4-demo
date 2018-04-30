@@ -119,7 +119,9 @@ angular.module('myApp.view1', ['ngRoute'])
                 "normal"
             ]
         }];
-
+        $scope.sortReverse  = true;
         $scope.myOrderProperty = 'id';
-
+        $scope.showName = function(name) {
+            alert(name);
+        };
     });
