@@ -124,4 +124,5 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.showName = function(name) {
             alert(name);
         };
+        
     });
